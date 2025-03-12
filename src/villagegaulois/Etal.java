@@ -1,5 +1,6 @@
 package villagegaulois;
 
+
 import personnages.Gaulois;
 
 public class Etal {
@@ -50,8 +51,19 @@ public class Etal {
 		return "L'etal est libre";
 	}
 
-	public String acheterProduit(int quantiteAcheter, Gaulois acheteur) {
-		if (etalOccupe) {
+	public String acheterProduit(int quantiteAcheter, Gaulois acheteur){
+		try {
+			if (acheteur == null) {
+				throw new NullPointerException("L'acheteur ne doit pas être null ");
+			}
+			if (quantiteAcheter<=0) {
+				throw new IllegalArgumentException("La quantité doit être positive");
+			}
+			
+			if (!etalOccupe) {
+				throw new IllegalStateException("L'etal doit être occupe");
+			}
+			
 			StringBuilder chaine = new StringBuilder();
 			chaine.append(acheteur.getNom() + " veut acheter " + quantiteAcheter
 					+ " " + produit + " Ã  " + vendeur.getNom());
@@ -73,8 +85,10 @@ public class Etal {
 						+ vendeur.getNom() + "\n");
 			}
 			return chaine.toString();
+		}catch (IllegalStateException | NullPointerException | IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 
 	public boolean contientProduit(String produit) {
